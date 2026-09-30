@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Learning Hub</title>
+<style>
+:root{
+  --bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#667085;--primary:#5b5bd6;
+  --primary2:#7c3aed;--accent:#14b8a6;--border:#e7eaf2;--shadow:0 12px 35px rgba(32,40,80,.10);
+  --good:#16a34a;--bad:#dc2626;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button{font:inherit;cursor:pointer;border:0}
+.app{display:flex;min-height:100vh}
+.sidebar{width:255px;background:#15182b;color:#fff;padding:25px 16px;position:fixed;left:0;top:0;bottom:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;padding:8px 10px 28px;font-weight:800;font-size:20px}
+.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#7c3aed,#22c1c3);display:grid;place-items:center;font-size:21px}
+.nav{display:grid;gap:7px}.nav button{background:transparent;color:#bfc4d8;text-align:left;padding:12px 14px;border-radius:12px;display:flex;gap:12px;align-items:center}
+.nav button:hover,.nav button.active{background:#282d4b;color:#fff}.nav span{width:23px;text-align:center}
+.side-progress{position:absolute;left:18px;right:18px;bottom:24px;background:#20243c;border-radius:16px;padding:15px}
+.progressbar{height:8px;background:#3a405e;border-radius:20px;overflow:hidden;margin:9px 0}.progressbar i{display:block;height:100%;background:linear-gradient(90deg,#7c3aed,#20c997);width:0}
+.main{margin-left:255px;width:calc(100% - 255px);padding:30px;max-width:1500px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}.welcome h1{margin:0 0 5px;font-size:30px}.welcome p{margin:0;color:var(--muted)}
+.top-actions{display:flex;gap:9px}.iconbtn{width:42px;height:42px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow)}
+.hero{background:linear-gradient(120deg,#5b5bd6,#7c3aed 60%,#20b997);color:white;border-radius:25px;padding:30px;display:flex;justify-content:space-between;gap:20px;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.hero:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);right:-70px;top:-90px}
+.hero h2{font-size:29px;margin:0 0 10px}.hero p{max-width:620px;line-height:1.6;color:#eee}
+.btn{padding:11px 17px;border-radius:11px;font-weight:700;background:var(--primary);color:white}.btn.light{background:white;color:#4d4bc3}.btn.outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0}
+.stat,.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:0 5px 20px rgba(20,30,70,.04)}
+.stat{display:flex;align-items:center;gap:13px}.stat .ico{width:45px;height:45px;border-radius:13px;background:#f0efff;display:grid;place-items:center;font-size:21px}.stat b{font-size:22px;display:block}.stat small{color:var(--muted)}
+.section{display:none}.section.active{display:block}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:25px 0 14px}.section-head h2{margin:0}.section-head p{color:var(--muted)}
+.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.lesson{position:relative;overflow:hidden}.lesson .tag{display:inline-block;padding:5px 9px;border-radius:99px;background:#f0efff;color:#514fc1;font-size:12px;font-weight:800}.lesson h3{margin:14px 0 8px}.lesson p{color:var(--muted);line-height:1.5}.lesson .emoji{font-size:32px;float:right}
+.lesson.done{border-color:#a7e5bd}.done-label{color:var(--good);font-size:12px;font-weight:800}
+.feature-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.vocab-card{display:flex;justify-content:space-between;align-items:center;gap:15px}.word{font-size:32px;font-weight:850}.meaning{color:var(--muted);margin-top:4px}.speak{background:#eef0ff;color:#4e4dcc;border-radius:50%;width:45px;height:45px}
+.quizbox{max-width:850px;margin:auto}.question{font-size:22px;font-weight:800;margin:12px 0 18px}.answers{display:grid;gap:10px}.answer{padding:14px 16px;text-align:left;border:1px solid var(--border);background:#fff;border-radius:12px}.answer:hover{border-color:#8c8ae8;background:#f8f7ff}.answer.correct{border-color:#75cf91;background:#edfff2}.answer.wrong{border-color:#ef8b8b;background:#fff0f0}.feedback{min-height:30px;margin-top:14px;font-weight:700}.quiz-top{display:flex;justify-content:space-between;color:var(--muted)}
+.flash{perspective:900px;min-height:230px;display:grid;place-items:center}.flash-inner{width:100%;min-height:230px;background:linear-gradient(135deg,#fff,#f4f2ff);border:1px solid var(--border);border-radius:22px;display:grid;place-items:center;text-align:center;padding:30px;cursor:pointer}.flash .big{font-size:44px;font-weight:900}.input{width:100%;padding:13px;border:1px solid var(--border);border-radius:11px;font-size:16px;margin:8px 0}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid var(--border)}.badge{display:inline-block;padding:7px 11px;border-radius:99px;background:#ecfdf5;color:#087443;font-weight:800;font-size:12px}
+footer{text-align:center;color:var(--muted);padding:30px}
+.mobile-menu{display:none}
+@media(max-width:1050px){.lesson-grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.feature-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}
+ .main{margin-left:0;width:100%;padding:18px}.mobile-menu{display:block}.topbar{gap:10px}.welcome h1{font-size:24px}.hero{padding:23px}.hero h2{font-size:23px}.stats,.lesson-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">A</div> English Learning Hub</div>
+  <nav class="nav">
+    <button class="active" data-section="home"><span>🏠</span> Dashboard</button>
+    <button data-section="lessons"><span>📚</span> Lessons</button>
+    <button data-section="vocabulary"><span>🧠</span> Vocabulary</button>
+    <button data-section="grammar"><span>✏️</span> Grammar</button>
+    <button data-section="quiz"><span>🎯</span> Quiz Practice</button>
+    <button data-section="speaking"><span>🔊</span> Speaking</button>
+    <button data-section="progress"><span>📊</span> My Progress</button>
+  </nav>
+  <div class="side-progress">
+    <small>Learning progress</small>
+    <div class="progressbar"><i id="sideBar"></i></div>
+    <b id="sidePct">0%</b>
+  </div>
+</aside>
+
+<main class="main">
+<div class="topbar">
+  <div class="welcome"><button class="iconbtn mobile-menu" onclick="toggleMenu()">☰</button> <h1 style="display:inline">Hello, Learner! 👋</h1><p>Learn English step by step and build confidence.</p></div>
+  <div class="top-actions"><button class="iconbtn" onclick="toggleTheme()" title="Toggle theme">🌙</button></div>
+</div>
+
+<section id="home" class="section active">
+  <div class="hero">
+    <div><h2>Make English part of your everyday life.</h2><p>Practice vocabulary, grammar, pronunciation, and communication through short lessons and interactive activities.</p><button class="btn light" onclick="showSection('lessons')">Start Learning →</button></div>
+    <div style="font-size:95px;align-self:center">📖</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="ico">🔥</div><div><b id="streak">1</b><small>Day streak</small></div></div>
+    <div class="stat"><div class="ico">📚</div><div><b id="completed">0</b><small>Lessons done</small></div></div>
+    <div class="stat"><div class="ico">🎯</div><div><b id="score">0</b><small>Quiz points</small></div></div>
+    <div class="stat"><div class="ico">⭐</div><div><b id="level">Beginner</b><small>Current level</small></div></div>
+  </div>
+  <div class="section-head"><div><h2>Continue Learning</h2><p>Pick an activity and keep improving.</p></div></div>
+  <div class="lesson-grid">
+    <div class="card lesson"><span class="emoji">🗣️</span><span class="tag">Speaking</span><h3>Everyday Conversations</h3><p>Learn useful expressions for greetings, introductions, and daily conversations.</p><button class="btn" onclick="showSection('speaking')">Practice</button></div>
+    <div class="card lesson"><span class="emoji">📝</span><span class="tag">Grammar</span><h3>Present Simple</h3><p>Understand how to talk about routines, facts, and habits.</p><button class="btn" onclick="showSection('grammar')">Learn</button></div>
+    <div class="card lesson"><span class="emoji">💡</span><span class="tag">Vocabulary</span><h3>Useful Daily Words</h3><p>Build your vocabulary with words you can use in everyday situations.</p><button class="btn" onclick="showSection('vocabulary')">Study</button></div>
+  </div>
+</section>
+
+<section id="lessons" class="section">
+<div class="section-head"><div><h2>English Lessons</h2><p>Short lessons designed for steady progress.</p></div></div>
+<div class="lesson-grid" id="lessonGrid"></div>
+</section>
+
+<section id="vocabulary" class="section">
+<div class="section-head"><div><h2>Vocabulary Practice</h2><p>Click the card to reveal the meaning. Use 🔊 to hear the word.</p></div></div>
+<div class="feature-grid">
+<div class="flash"><div class="flash-inner" onclick="flipCard()"><div id="flashContent"><small>Word</small><div class="big">curious</div><p>Click to reveal meaning</p></div></div></div>
+<div class="card"><h3>Word Challenge</h3><p>Choose the closest meaning of <b id="vocabWord">curious</b>.</p><div id="vocabChoices"></div><p class="feedback" id="vocabFeedback"></p><button class="btn" onclick="nextVocab()">Next Word</button></div>
+</div>
+</section>
+
+<section id="grammar" class="section">
+<div class="section-head"><div><h2>Grammar Lab</h2><p>Learn the rule, see examples, then try a mini exercise.</p></div></div>
+<div class="card">
+<h2>Present Simple</h2>
+<p>We use the present simple for routines, habits, facts, and things that are generally true.</p>
+<div class="feature-grid">
+<div><h3>Examples</h3><p>• I <b>study</b> English every day.</p><p>• She <b>works</b> at a school.</p><p>• Water <b>boils</b> at 100°C.</p></div>
+<div><h3>Remember</h3><p>With <b>he, she, it</b>, usually add <b>-s</b> or <b>-es</b> to the verb.</p><p><span class="badge">I play</span> → <span class="badge">She plays</span></p></div>
+</div>
+<hr style="border:0;border-top:1px solid var(--border);margin:22px 0">
+<h3>Try it</h3><p>Choose the correct sentence:</p>
+<div class="answers"><button class="answer" onclick="grammarAnswer(this,false)">He walk to school every day.</button><button class="answer" onclick="grammarAnswer(this,true)">He walks to school every day.</button><button class="answer" onclick="grammarAnswer(this,false)">He walking to school every day.</button></div>
+<p class="feedback" id="grammarFeedback"></p>
+</div>
+</section>
+
+<section id="quiz" class="section">
+<div class="section-head"><div><h2>Quiz Practice</h2><p>Test your English knowledge. You get 10 points for each correct answer.</p></div></div>
+<div class="card quizbox">
+<div class="quiz-top"><span id="qNum">Question 1 of 5</span><span>Score: <b id="quizScore">0</b></span></div>
+<div class="progressbar"><i id="quizBar" style="width:20%"></i></div>
+<div class="question" id="question"></div>
+<div class="answers" id="answers"></div>
+<p class="feedback" id="quizFeedback"></p>
+<button class="btn" id="nextQ" onclick="nextQuestion()" style="display:none">Next Question →</button>
+</div>
+</section>
+
+<section id="speaking" class="section">
+<div class="section-head"><div><h2>Speaking Studio</h2><p>Listen, repeat, and practice useful English expressions.</p></div></div>
+<div class="card">
+<h3>Daily Conversation</h3>
+<p>Click 🔊 to hear the sentence, then say it aloud.</p>
+<div class="vocab-card" style="border-top:1px solid var(--border);padding-top:20px"><div><b>Hello! How are you today?</b><p class="meaning">A friendly greeting.</p></div><button class="speak" onclick="speak('Hello! How are you today?')">🔊</button></div>
+<div class="vocab-card" style="border-top:1px solid var(--border);padding-top:20px"><div><b>Nice to meet you.</b><p class="meaning">Used when meeting someone for the first time.</p></div><button class="speak" onclick="speak('Nice to meet you.')">🔊</button></div>
+<div class="vocab-card" style="border-top:1px solid var(--border);padding-top:20px"><div><b>Could you please help me?</b><p class="meaning">A polite way to ask for help.</p></div><button class="speak" onclick="speak('Could you please help me?')">🔊</button></div>
+</div>
+<div class="card" style="margin-top:16px"><h3>Pronunciation Challenge</h3><p>Type a word you want to hear:</p><input class="input" id="speakInput" placeholder="Example: beautiful"><button class="btn" onclick="speak(document.getElementById('speakInput').value)">🔊 Listen</button></div>
+</section>
+
+<section id="progress" class="section">
+<div class="section-head"><div><h2>My Progress</h2><p>Your learning activity is saved in this browser.</p></div></div>
+<div class="stats">
+<div class="stat"><div class="ico">📈</div><div><b id="progPct">0%</b><small>Overall progress</small></div></div>
+<div class="stat"><div class="ico">🏆</div><div><b id="progPoints">0</b><small>Total points</small></div></div>
+<div class="stat"><div class="ico">📚</div><div><b id="progLessons">0</b><small>Lessons completed</small></div></div>
+<div class="stat"><div class="ico">🎓</div><div><b id="progLevel">Beginner</b><small>Learning level</small></div></div>
+</div>
+<div class="card"><h3>Learning Checklist</h3><table class="table"><thead><tr><th>Activity</th><th>Status</th></tr></thead><tbody id="checklist"></tbody></table></div>
+<div style="margin-top:15px"><button class="btn outline" onclick="resetProgress()">Reset Progress</button></div>
+</section>
+<footer>English Learning Hub • Learn • Practice • Improve 🌱</footer>
+</main>
+</div>
+
+<script>
+const state=JSON.parse(localStorage.getItem('englishHub')||'{"lessons":[],"points":0,"quizBest":0,"vocab":0}');
+const lessons=[
+['📖','Beginner','Greetings & Introductions','Learn common greetings and introduce yourself naturally.'],
+['🔤','Beginner','Parts of Speech','Explore nouns, verbs, adjectives, and adverbs.'],
+['⏰','Beginner','Present Simple','Talk about routines, habits, and facts.'],
+['🧩','Beginner','Sentence Building','Put words together to make clear sentences.'],
+['💬','Elementary','Daily Conversations','Practice useful expressions for real-life situations.'],
+['📚','Elementary','Past Simple','Talk about completed actions in the past.'],
+['🚀','Elementary','Future Plans','Use simple structures to talk about plans.'],
+['📝','Elementary','Writing Basics','Build clear paragraphs with topic sentences.'],
+['🎤','Elementary','Speaking Confidence','Practice speaking clearly and politely.']
+];
+function save(){localStorage.setItem('englishHub',JSON.stringify(state));updateUI()}
+function showSection(id){
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.section===id));
+ document.getElementById('sidebar').classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showSection(b.dataset.section));
+function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
+function toggleTheme(){
+ document.body.classList.toggle('dark');
+ if(document.body.classList.contains('dark')){
+  document.documentElement.style.setProperty('--bg','#0f1220');document.documentElement.style.setProperty('--card','#171b2c');document.documentElement.style.setProperty('--text','#f2f4ff');document.documentElement.style.setProperty('--muted','#aab0c4');document.documentElement.style.setProperty('--border','#2b3047');
+ }else{location.reload()}
+}
+function renderLessons(){
+ const g=document.getElementById('lessonGrid');g.innerHTML='';
+ lessons.forEach((l,i)=>{
+  const done=state.lessons.includes(i);
+  g.innerHTML+=`<div class="card lesson ${done?'done':''}"><span class="emoji">${l[0]}</span><span class="tag">${l[1]}</span><h3>${l[2]}</h3><p>${l[3]}</p>${done?'<div class="done-label">✓ Completed</div>':'<button class="btn" onclick="completeLesson('+i+')">Mark Complete</button>'}</div>`;
+ });
+}
+function completeLesson(i){if(!state.lessons.includes(i)){state.lessons.push(i);state.points+=10;save();renderLessons();}}
+const vocab=[
+['curious','wanting to know or learn something','careless','interested','angry'],
+['generous','willing to give or share','selfish','kind and giving','quiet'],
+['ancient','very old','modern','very old','quick'],
+['confident','sure about your abilities','nervous','sure of yourself','tired'],
+['improve','to make something better','reduce','make better','forget']
+];
+let vi=0,flipped=false;
+function renderVocab(){
+ const v=vocab[vi];document.getElementById('vocabWord').textContent=v[0];document.getElementById('vocabFeedback').textContent='';
+ document.getElementById('flashContent').innerHTML=`<small>Word</small><div class="big">${flipped?v[1]:v[0]}</div><p>${flipped?'Click to see the word':'Click to reveal meaning'}</p>`;
+ let arr=[v[2],v[3],v[4]].sort(()=>Math.random()-.5);
+ document.getElementById('vocabChoices').innerHTML=arr.map(x=>`<button class="answer" onclick="vocabAnswer(this,'${x.replace(/'/g,"\\'")}')">${x}</button>`).join('');
+}
+function flipCard(){flipped=!flipped;renderVocab()}
+function vocabAnswer(btn,x){const v=vocab[vi];document.querySelectorAll('#vocabChoices .answer').forEach(b=>b.disabled=true);if(x===v[1]){btn.classList.add('correct');document.getElementById('vocabFeedback').textContent='✓ Correct!';state.points+=5;state.vocab++}else{btn.classList.add('wrong');document.getElementById('vocabFeedback').textContent='Not quite. The correct meaning is: '+v[1]}save()}
+function nextVocab(){vi=(vi+1)%vocab.length;flipped=false;renderVocab()}
+const questions=[
+['Which word is a verb?',['happy','run','beautiful','school'],1],
+['Choose the correct sentence.',['She go to school.','She goes to school.','She going school.','She gone school.'],1],
+['What is the opposite of “easy”?',['simple','hard','light','early'],1],
+['Choose the best greeting.',['Good morning!','Good sleep!','Good eat!','Good run!'],0],
+['Which word is an adjective?',['quickly','jump','beautiful','teacher'],2]
+];
+let qi=0,qscore=0,answered=false;
+function renderQuiz(){
+ const q=questions[qi];answered=false;document.getElementById('qNum').textContent=`Question ${qi+1} of ${questions.length}`;
+ document.getElementById('quizBar').style.width=((qi+1)/questions.length*100)+'%';document.getElementById('question').textContent=q[0];
+ document.getElementById('answers').innerHTML=q[1].map((x,i)=>`<button class="answer" onclick="answerQuiz(this,${i})">${x}</button>`).join('');
+ document.getElementById('quizFeedback').textContent='';document.getElementById('nextQ').style.display='none';document.getElementById('quizScore').textContent=qscore;
+}
+function answerQuiz(btn,i){if(answered)return;answered=true;const q=questions[qi];document.querySelectorAll('#answers .answer').forEach((b,j)=>{if(j===q[2])b.classList.add('correct')});if(i===q[2]){qscore+=10;state.points+=10;document.getElementById('quizFeedback').textContent='✓ Correct! Great job.'}else{btn.classList.add('wrong');document.getElementById('quizFeedback').textContent='Keep practicing. The correct answer is highlighted.'}document.getElementById('quizScore').textContent=qscore;document.getElementById('nextQ').style.display='inline-block';save()}
+function nextQuestion(){if(qi<questions.length-1){qi++;renderQuiz()}else{state.quizBest=Math.max(state.quizBest,qscore);save();document.getElementById('quizFeedback').textContent=`Quiz complete! You scored ${qscore}/${questions.length*10}.`;document.getElementById('nextQ').textContent='Restart Quiz';document.getElementById('nextQ').onclick=()=>{qi=0;qscore=0;document.getElementById('nextQ').textContent='Next Question →';document.getElementById('nextQ').onclick=nextQuestion;renderQuiz()}}}
+function grammarAnswer(btn,correct){document.querySelectorAll('#grammar .answer').forEach(b=>b.disabled=true);btn.classList.add(correct?'correct':'wrong');document.getElementById('grammarFeedback').textContent=correct?'✓ Correct! Remember: he/she/it usually takes -s.':'✗ Try again. Check the verb form for “he.”';if(correct){state.points+=5;save()}}
+function speak(text){if(!text)return;if('speechSynthesis' in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.9;speechSynthesis.speak(u)}else alert('Speech is not supported in this browser.')}
+function updateUI(){
+ const pct=Math.min(100,Math.round((state.lessons.length/lessons.length)*100));
+ document.getElementById('completed').textContent=state.lessons.length;document.getElementById('score').textContent=state.points;
+ document.getElementById('sideBar').style.width=pct+'%';document.getElementById('sidePct').textContent=pct+'%';
+ document.getElementById('progPct').textContent=pct+'%';document.getElementById('progPoints').textContent=state.points;document.getElementById('progLessons').textContent=state.lessons.length;
+ let level=state.points>=100?'Advanced':state.points>=50?'Intermediate':'Beginner';document.getElementById('level').textContent=level;document.getElementById('progLevel').textContent=level;
+ document.getElementById('checklist').innerHTML=lessons.map((l,i)=>`<tr><td>${l[0]} ${l[2]}</td><td>${state.lessons.includes(i)?'<span class="badge">Completed</span>':'<span style="color:var(--muted)">Not completed</span>'}</td></tr>`).join('');
+}
+function resetProgress(){if(confirm('Reset all learning progress?')){localStorage.removeItem('englishHub');location.reload()}}
+renderLessons();renderVocab();renderQuiz();updateUI();
+</script>
+</body>
+</html>
